@@ -1,0 +1,819 @@
+<title>임신·간 건강 주간 식단</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hahmlet:wght@500;700&family=IBM+Plex+Sans+KR:wght@400;500;600&display=swap">
+<style>
+/* Layout: 냉장고에 붙이는 주간 식단표. 한눈에 보기 표 → 요일 탭(저녁이 주인공 카드) → 점심·밀프렙·체크·장보기 */
+:root {
+  --bg: #f4f6f2;
+  --surface: #ffffff;
+  --ink: #1b241f;
+  --muted: #59665e;
+  --line: #d9e0da;
+  --green: #2d6a46;
+  --green-soft: #e2ede5;
+  --mom: #973a60;
+  --mom-soft: #f5e5ec;
+  --liver: #8f5c10;
+  --liver-soft: #f6ecd9;
+  --font-display: "Hahmlet", "Nanum Myeongjo", "AppleMyungjo", serif;
+  --font-body: "IBM Plex Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+  --radius: 10px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #111613; --surface: #19201c; --ink: #e6ebe7; --muted: #a0aca4; --line: #2b3530;
+    --green: #7cc29a; --green-soft: #1e3227; --mom: #e692b5; --mom-soft: #39212d;
+    --liver: #e2b064; --liver-soft: #35291a; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #111613; --surface: #19201c; --ink: #e6ebe7; --muted: #a0aca4; --line: #2b3530;
+  --green: #7cc29a; --green-soft: #1e3227; --mom: #e692b5; --mom-soft: #39212d;
+  --liver: #e2b064; --liver-soft: #35291a; color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.65;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+.wrap {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 32px 64px;
+  display: flex;
+  flex-direction: column;
+  gap: 44px;
+}
+h1, h2, h3, h4 { font-family: var(--font-display); text-wrap: balance; margin: 0; line-height: 1.3; }
+h1 { font-size: clamp(28px, 5vw, 40px); font-weight: 700; letter-spacing: -0.01em; }
+h2 { font-size: 22px; font-weight: 700; }
+h3 { font-size: 19px; font-weight: 700; }
+h4 { font-size: 16px; font-weight: 700; }
+p { margin: 0; }
+ul, ol { margin: 0; padding-left: 1.2em; }
+a { color: var(--green); }
+a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
+.eyebrow { font-size: 12px; font-weight: 600; letter-spacing: 0.08em; color: var(--green); }
+.muted { color: var(--muted); }
+.small { font-size: 13px; }
+section > .section-head { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
+section > .section-head p { color: var(--muted); max-width: 65ch; }
+
+/* Header */
+.top { display: flex; flex-direction: column; gap: 18px; }
+.lead { max-width: 62ch; font-size: 16px; color: var(--muted); }
+.people { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; }
+.person { border-radius: var(--radius); padding: 14px 16px; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.person.mom { background: var(--mom-soft); }
+.person.liver { background: var(--liver-soft); }
+.person b { font-size: 14px; }
+.person.mom b { color: var(--mom); }
+.person.liver b { color: var(--liver); }
+.person ul { font-size: 14px; padding-left: 1.1em; }
+.facts { display: flex; flex-wrap: wrap; gap: 8px; }
+.fact { font-size: 13px; padding: 4px 10px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); font-variant-numeric: tabular-nums; }
+.fact b { color: var(--green); font-weight: 600; }
+
+.flow { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 0; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); overflow: hidden; }
+.flow-step { padding: 12px 14px; display: flex; flex-direction: column; gap: 2px; border-right: 1px solid var(--line); min-width: 0; }
+.flow-step:last-child { border-right: 0; }
+.flow-step .t { font-size: 12px; font-weight: 600; color: var(--green); font-variant-numeric: tabular-nums; }
+.flow-step p { font-size: 14px; }
+
+/* Overview table */
+.table-scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
+table { border-collapse: collapse; width: 100%; min-width: 720px; font-size: 14px; }
+th, td { text-align: left; vertical-align: top; padding: 10px 12px; border-bottom: 1px solid var(--line); }
+thead th { font-size: 12px; letter-spacing: 0.06em; color: var(--muted); font-weight: 600; background: var(--bg); }
+tbody tr:last-child td, tbody tr:last-child th { border-bottom: 0; }
+tbody th { font-family: var(--font-display); font-size: 16px; width: 52px; }
+td.dinner { font-weight: 500; }
+td .from { display: block; font-size: 12px; color: var(--muted); }
+tr.weekend th, tr.weekend td { background: color-mix(in srgb, var(--green-soft) 45%, transparent); }
+
+/* Day tabs */
+.tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px; }
+.tab {
+  font: inherit; font-size: 15px; font-weight: 600; cursor: pointer;
+  min-width: 48px; padding: 8px 14px; border-radius: 999px;
+  border: 1px solid var(--line); background: var(--surface); color: var(--ink);
+}
+.tab[aria-selected="true"] { background: var(--green); border-color: var(--green); color: var(--surface); }
+.tab .today { font-size: 11px; font-weight: 500; margin-left: 4px; opacity: 0.8; }
+.day { display: flex; flex-direction: column; gap: 14px; }
+.day + .day { margin-top: 28px; }
+.js .day + .day { margin-top: 0; }
+.day-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; }
+.day-head p { color: var(--muted); }
+.meals { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; }
+.meal { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.meal.full { grid-column: 1 / -1; }
+.meal.dinner { border-color: color-mix(in srgb, var(--green) 45%, var(--line)); }
+.meal-title { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 10px; }
+.meal-title span { font-size: 13px; color: var(--muted); font-family: var(--font-body); font-weight: 400; }
+.menu { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 6px 14px; font-weight: 500; }
+.menu li::before { content: "·"; color: var(--green); margin-right: 6px; font-weight: 700; }
+.addon { font-size: 14px; color: var(--muted); }
+.addon b { color: var(--ink); font-weight: 600; }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.tag { font-size: 12px; padding: 2px 8px; border-radius: 999px; background: var(--green-soft); color: var(--green); font-weight: 600; }
+.steps { font-size: 14px; display: flex; flex-direction: column; gap: 4px; }
+.adjust { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 8px; }
+.who { border-radius: 8px; padding: 10px 12px; font-size: 14px; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.who b { font-size: 13px; }
+.who.mom { background: var(--mom-soft); }
+.who.mom b { color: var(--mom); }
+.who.liver { background: var(--liver-soft); }
+.who.liver b { color: var(--liver); }
+.keep { font-size: 14px; border-top: 1px dashed var(--line); padding-top: 10px; }
+.keep b { color: var(--green); font-weight: 600; margin-right: 6px; }
+
+/* Two-column guides */
+.cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; }
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.panel.mom { border-top: 3px solid var(--mom); }
+.panel.liver { border-top: 3px solid var(--liver); }
+.panel.mom h3 { color: var(--mom); }
+.panel.liver h3 { color: var(--liver); }
+.panel h4 { font-family: var(--font-body); font-size: 13px; font-weight: 600; color: var(--muted); letter-spacing: 0.04em; }
+.panel ul { font-size: 14px; display: flex; flex-direction: column; gap: 3px; }
+.rule { background: var(--green-soft); border-radius: var(--radius); padding: 12px 16px; font-size: 14px; margin-bottom: 12px; }
+.rule b { color: var(--green); }
+
+/* Meal prep */
+.prep { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 0; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
+.prep li { display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 12px; padding: 12px 16px; border-bottom: 1px solid var(--line); }
+.prep li:last-child { border-bottom: 0; }
+.prep .time { font-size: 13px; font-weight: 600; color: var(--green); font-variant-numeric: tabular-nums; padding-top: 2px; }
+.prep .what { display: flex; flex-direction: column; gap: 2px; font-size: 14px; }
+.prep .what b { font-size: 15px; }
+
+.smoothies { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin-top: 12px; }
+
+/* Checklists */
+.check-list { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.check-list label { display: flex; gap: 10px; align-items: flex-start; cursor: pointer; font-size: 14px; }
+.check-list input { width: 18px; height: 18px; margin: 2px 0 0; accent-color: var(--green); flex: none; }
+.check-list input:checked + span { color: var(--muted); text-decoration: line-through; }
+.check-list .qty { color: var(--muted); font-variant-numeric: tabular-nums; }
+.panel-foot { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
+.btn { font: inherit; font-size: 13px; padding: 6px 12px; border-radius: 8px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); cursor: pointer; }
+.btn:hover { border-color: var(--green); }
+.shop { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+
+/* Notes */
+.notes { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; }
+.notes ol, .notes ul { font-size: 14px; display: flex; flex-direction: column; gap: 6px; }
+footer { border-top: 1px solid var(--line); padding-top: 20px; display: flex; flex-direction: column; gap: 10px; font-size: 13px; color: var(--muted); }
+footer ul { display: flex; flex-direction: column; gap: 2px; }
+
+@media (max-width: 640px) {
+  .meals { grid-template-columns: minmax(0, 1fr); }
+  .flow-step { border-right: 0; border-bottom: 1px solid var(--line); }
+  .flow-step:last-child { border-bottom: 0; }
+  .prep li { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .tab { transition: background-color .15s, border-color .15s; }
+}
+</style>
+
+<div class="wrap">
+
+  <header class="top">
+    <span class="eyebrow">1주 식단 · 하루 3끼</span>
+    <h1>임신·간 건강 주간 식단</h1>
+    <p class="lead">임신 초기인 가족과 간 수치(감마GT)를 관리하는 가족이 같은 저녁을 먹고, 사람마다 조금씩 조정하는 식단입니다. 평일 저녁은 18시 이후 30분 안팎으로 만들고, 넉넉히 만들어 다음 날 아침에 데워 먹습니다. 점심은 각자 회사에서 먹습니다.</p>
+    <div class="people">
+      <div class="person mom">
+        <b>임신부</b>
+        <ul>
+          <li>느끼한 음식은 피함 → 튀김 없이 찜·조림·맑은국 위주</li>
+          <li>날것, 덜 익힌 고기·달걀, 고수은 생선 제외</li>
+          <li>카페인 하루 200mg 미만, 금주</li>
+        </ul>
+      </div>
+      <div class="person liver">
+        <b>간 관리</b>
+        <ul>
+          <li>금주, 단 음료·과자 줄이기</li>
+          <li>밥 2/3공기, 채소 먼저 먹기(저혈당지수)</li>
+          <li>십자화과 채소 매일, 우유 대신 두유·요구르트</li>
+        </ul>
+      </div>
+    </div>
+    <div class="facts" aria-label="이번 주 요약">
+      <span class="fact">저수은 생선 <b>3회</b></span>
+      <span class="fact">십자화과 채소 <b>7일</b></span>
+      <span class="fact">튀김 <b>0회</b></span>
+      <span class="fact">미역국 <b>1회</b></span>
+      <span class="fact">평일 조리 <b>25~35분</b></span>
+    </div>
+    <div class="flow" aria-label="하루 흐름">
+      <div class="flow-step"><span class="t">18:00 이후</span><p>저녁 조리. 국·반찬은 2인분 더 만들기</p></div>
+      <div class="flow-step"><span class="t">식후 2시간 안</span><p>남긴 음식 1인분씩 담아 냉장</p></div>
+      <div class="flow-step"><span class="t">다음 날 아침</span><p>김이 날 때까지 데워서 + 과일·달걀</p></div>
+      <div class="flow-step"><span class="t">점심</span><p>각자 회사. 아래 고르는 법 참고</p></div>
+    </div>
+  </header>
+
+  <section id="overview">
+    <div class="section-head">
+      <h2>한눈에 보기</h2>
+      <p>아침은 전날 저녁을 데워 먹으므로, 월요일 아침은 일요일 저녁 메뉴입니다. 주말에는 점심도 집에서 만듭니다.</p>
+    </div>
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr><th scope="col">요일</th><th scope="col">아침 (전날 저녁 데워서)</th><th scope="col">점심</th><th scope="col">저녁 (18시 이후 조리)</th></tr>
+        </thead>
+        <tbody>
+          <tr><th scope="row">월</th><td>수육, 배추된장국, 무생채<span class="from">+ 귤</span></td><td class="muted">회사</td><td class="dinner">소고기 미역국, 두부구이, 브로콜리 겨자무침</td></tr>
+          <tr><th scope="row">화</th><td>미역국, 두부구이, 브로콜리무침<span class="from">+ 키위</span></td><td class="muted">회사</td><td class="dinner">연어 구이, 양배추·당근찜, 단호박찜, 배추된장국</td></tr>
+          <tr><th scope="row">수</th><td>된장국, 양배추찜, 단호박<span class="from">+ 삶은 달걀</span></td><td class="muted">회사</td><td class="dinner">닭고기 채소 맑은탕, 시금치나물, 멸치호두볶음</td></tr>
+          <tr><th scope="row">목</th><td>닭죽, 시금치나물<span class="from">+ 사과 반쪽</span></td><td class="muted">회사</td><td class="dinner">고등어 무조림, 청경채 된장무침, 달걀국</td></tr>
+          <tr><th scope="row">금</th><td>조림 무, 청경채무침, 달걀국<span class="from">+ 요구르트·두유, 블루베리</span></td><td class="muted">회사</td><td class="dinner">소고기 채소 비빔밥, 무 콩나물국</td></tr>
+          <tr class="weekend"><th scope="row">토</th><td>비빔밥 재료, 콩나물국<span class="from">+ 키위</span></td><td>새우 브로콜리 마늘볶음, 양배추 샐러드</td><td class="dinner">두부 버섯 전골</td></tr>
+          <tr class="weekend"><th scope="row">일</th><td>전골 채소죽<span class="from">+ 귤</span></td><td>잡곡 채소김밥</td><td class="dinner">돼지 안심 수육, 쌈, 무생채, 배추된장국</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="days">
+    <div class="section-head">
+      <h2>요일별 상세</h2>
+      <p>저녁 카드에 조리 순서, 사람별 조정, 다음 날 아침용으로 남길 음식을 적었습니다. 오늘 요일이 먼저 열립니다.</p>
+    </div>
+    <div class="tabs" role="tablist" aria-label="요일 선택" hidden>
+      <button class="tab" role="tab" id="tab-1" aria-controls="day-1" data-day="1">월</button>
+      <button class="tab" role="tab" id="tab-2" aria-controls="day-2" data-day="2">화</button>
+      <button class="tab" role="tab" id="tab-3" aria-controls="day-3" data-day="3">수</button>
+      <button class="tab" role="tab" id="tab-4" aria-controls="day-4" data-day="4">목</button>
+      <button class="tab" role="tab" id="tab-5" aria-controls="day-5" data-day="5">금</button>
+      <button class="tab" role="tab" id="tab-6" aria-controls="day-6" data-day="6">토</button>
+      <button class="tab" role="tab" id="tab-0" aria-controls="day-0" data-day="0">일</button>
+    </div>
+
+    <!-- 월 -->
+    <div class="day" id="day-1" role="tabpanel" aria-labelledby="tab-1">
+      <div class="day-head"><h3>월요일</h3><p>철분 채우는 날</p></div>
+      <div class="meals">
+        <article class="meal">
+          <h4 class="meal-title">아침 <span>일요일 저녁 데워서</span></h4>
+          <ul class="menu"><li>수육</li><li>배추된장국</li><li>무생채</li><li>잡곡밥</li></ul>
+          <p class="addon"><b>곁들임</b> 귤 1개</p>
+        </article>
+        <article class="meal">
+          <h4 class="meal-title">점심 <span>각자 회사</span></h4>
+          <p class="small">식판은 채소 반찬 → 단백질 → 밥 순서로 먹습니다. 혈당이 천천히 오릅니다.</p>
+        </article>
+        <article class="meal dinner full">
+          <h4 class="meal-title">저녁 <span>18시 이후 · 30분</span></h4>
+          <ul class="menu"><li>소고기 미역국</li><li>두부구이</li><li>브로콜리 겨자무침</li><li>잡곡밥</li></ul>
+          <div class="tags"><span class="tag">철분</span><span class="tag">엽산</span><span class="tag">십자화과</span></div>
+          <ol class="steps">
+            <li>건미역을 10분 불리는 동안 브로콜리를 한입 크기로 썰어 3~4분 찝니다(밀프렙분이 있으면 사용).</li>
+            <li>냄비에 참기름 1작은술, 소고기(우둔·양지) 200g을 볶다가 미역과 물 6컵을 넣고 국간장으로 간해 15분 끓입니다. 위에 뜨는 기름은 걷어 냅니다.</li>
+            <li>두부는 1cm 두께로 썰어 물기를 닦고, 기름을 아주 조금 두른 팬에 노릇하게 굽습니다.</li>
+            <li>찐 브로콜리에 겨자가루 1/2작은술, 식초 1큰술, 간장 1작은술을 넣어 무칩니다. 겨자가 익힌 브로콜리의 설포라판 생성을 돕습니다.</li>
+          </ol>
+          <div class="adjust">
+            <div class="who mom"><b>임신부</b><p>미역 건더기는 한 그릇에 적당히(요오드). 철분 많은 식사라 녹차·커피는 1~2시간 뒤에.</p></div>
+            <div class="who liver"><b>간 관리</b><p>브로콜리부터 먹고, 밥은 2/3공기.</p></div>
+          </div>
+          <p class="keep"><b>내일 아침용</b>미역국 2인분, 두부구이, 브로콜리무침</p>
+        </article>
+      </div>
+    </div>
+
+    <!-- 화 -->
+    <div class="day" id="day-2" role="tabpanel" aria-labelledby="tab-2">
+      <div class="day-head"><h3>화요일</h3><p>생선 1회차 · 오메가-3</p></div>
+      <div class="meals">
+        <article class="meal">
+          <h4 class="meal-title">아침 <span>월요일 저녁 데워서</span></h4>
+          <ul class="menu"><li>미역국</li><li>두부구이</li><li>브로콜리무침</li><li>잡곡밥</li></ul>
+          <p class="addon"><b>곁들임</b> 키위 1개(비타민C가 철분 흡수를 도움)</p>
+        </article>
+        <article class="meal">
+          <h4 class="meal-title">점심 <span>각자 회사</span></h4>
+          <p class="small">식후 커피는 임신부 기준 하루 1잔까지입니다. 오전에 마셨다면 디카페인으로.</p>
+        </article>
+        <article class="meal dinner full">
+          <h4 class="meal-title">저녁 <span>18시 이후 · 25분</span></h4>
+          <ul class="menu"><li>연어 구이</li><li>양배추·당근찜</li><li>단호박찜</li><li>배추된장국</li><li>잡곡밥</li></ul>
+          <div class="tags"><span class="tag">오메가-3</span><span class="tag">저수은 생선</span><span class="tag">십자화과</span></div>
+          <ol class="steps">
+            <li>연어 2쪽(약 300g)에 소금·후추를 조금 뿌리고 레몬 슬라이스를 올려 에어프라이어 180°C에서 12~15분 굽습니다. 기름은 따로 두르지 않습니다.</li>
+            <li>그동안 단호박은 썰어 전자레인지에 5~6분, 양배추·당근은 찜기에 5분 찝니다.</li>
+            <li>물이나 멸치육수에 된장을 풀고 배추, 대파를 넣어 10분 끓입니다.</li>
+          </ol>
+          <div class="adjust">
+            <div class="who mom"><b>임신부</b><p>연어는 속까지 불투명하고 결대로 쉽게 갈라질 때까지 익힙니다. 비린내가 힘든 날은 두부스테이크나 닭안심으로 바꿉니다.</p></div>
+            <div class="who liver"><b>간 관리</b><p>단호박을 먹는 날은 밥을 반 공기로 줄입니다.</p></div>
+          </div>
+          <p class="keep"><b>내일 아침용</b>된장국, 양배추찜, 단호박 (연어는 당일에 다 먹기)</p>
+        </article>
+      </div>
+    </div>
+
+    <!-- 수 -->
+    <div class="day" id="day-3" role="tabpanel" aria-labelledby="tab-3">
+      <div class="day-head"><h3>수요일</h3><p>맑고 담백하게</p></div>
+      <div class="meals">
+        <article class="meal">
+          <h4 class="meal-title">아침 <span>화요일 저녁 데워서</span></h4>
+          <ul class="menu"><li>배추된장국</li><li>양배추찜</li><li>단호박</li><li>잡곡밥</li></ul>
+          <p class="addon"><b>곁들임</b> 삶은 달걀 1~2개(밀프렙), 콜린 보충</p>
+        </article>
+        <article class="meal">
+          <h4 class="meal-title">점심 <span>각자 회사</span></h4>
+          <p class="small">튀김이나 전이 나오면 1~2조각까지만. 임신부는 느끼한 날 국·나물 위주로.</p>
+        </article>
+        <article class="meal dinner full">
+          <h4 class="meal-title">저녁 <span>18시 이후 · 30분</span></h4>
+          <ul class="menu"><li>닭고기 채소 맑은탕</li><li>시금치나물</li><li>멸치호두볶음(밀프렙)</li><li>잡곡밥</li></ul>
+          <div class="tags"><span class="tag">담백</span><span class="tag">엽산</span><span class="tag">칼슘</span><span class="tag">십자화과</span></div>
+          <ol class="steps">
+            <li>물 8컵에 닭가슴살(또는 껍질 벗긴 닭다리살) 400g, 나박썰기한 무 1/4개, 마늘 5쪽, 대파를 넣고 20분 끓이며 거품을 걷습니다.</li>
+            <li>배추와 버섯을 넣어 5분 더 끓이고 소금·국간장으로 간합니다.</li>
+            <li>시금치 1단을 끓는 물에 30초 데쳐 찬물에 헹구고, 국간장·다진 마늘·참기름 조금·깨로 무칩니다.</li>
+          </ol>
+          <div class="adjust">
+            <div class="who mom"><b>임신부</b><p>닭은 가장 두꺼운 부분을 잘라 분홍빛이 없는지 확인합니다. 기름기 없는 맑은 국물이라 입덧 때도 비교적 편합니다.</p></div>
+            <div class="who liver"><b>간 관리</b><p>국물보다 건더기 위주로 드세요(나트륨).</p></div>
+          </div>
+          <p class="keep"><b>내일 아침용</b>맑은탕 2인분, 시금치나물</p>
+        </article>
+      </div>
+    </div>
+
+    <!-- 목 -->
+    <div class="day" id="day-4" role="tabpanel" aria-labelledby="tab-4">
+      <div class="day-head"><h3>목요일</h3><p>생선 2회차 · 기름 없이 조림</p></div>
+      <div class="meals">
+        <article class="meal">
+          <h4 class="meal-title">아침 <span>수요일 저녁 데워서</span></h4>
+          <ul class="menu"><li>닭죽(맑은탕에 밥 넣어 끓이기)</li><li>시금치나물</li></ul>
+          <p class="addon"><b>곁들임</b> 사과 반쪽</p>
+        </article>
+        <article class="meal">
+          <h4 class="meal-title">점심 <span>각자 회사</span></h4>
+          <p class="small">저녁이 고등어라 점심 생선 반찬은 건너뛰고 고기·두부 반찬을 고릅니다(생선 주 3회 관리).</p>
+        </article>
+        <article class="meal dinner full">
+          <h4 class="meal-title">저녁 <span>18시 이후 · 35분</span></h4>
+          <ul class="menu"><li>고등어 무조림</li><li>청경채 된장무침</li><li>달걀국</li><li>잡곡밥</li></ul>
+          <div class="tags"><span class="tag">오메가-3</span><span class="tag">저수은 생선</span><span class="tag">십자화과</span></div>
+          <ol class="steps">
+            <li>냄비 바닥에 무를 도톰하게 깔고 물 1.5컵을 넣어 먼저 10분 끓입니다.</li>
+            <li>손질한 고등어 1마리를 올리고 양념(간장 2큰술, 다진 마늘 1큰술, 생강 약간, 고춧가루 1작은술, 물엿 조금)을 끼얹어 중약불에서 15~20분 조립니다.</li>
+            <li>청경채를 데쳐 된장 1/2큰술, 들기름 조금으로 무칩니다.</li>
+            <li>멸치육수에 달걀 2개를 풀어 넣고 대파를 넣어 달걀국을 끓입니다.</li>
+          </ol>
+          <div class="adjust">
+            <div class="who mom"><b>임신부</b><p>비린내가 힘들면 같은 양념으로 동태(명태)를 조립니다. 생강은 메스꺼움에 도움이 될 수 있습니다.</p></div>
+            <div class="who liver"><b>간 관리</b><p>조림 국물은 밥에 비비지 말고 덜 드세요.</p></div>
+          </div>
+          <p class="keep"><b>내일 아침용</b>조림 무, 청경채무침, 달걀국 (생선은 당일에 다 먹기)</p>
+        </article>
+      </div>
+    </div>
+
+    <!-- 금 -->
+    <div class="day" id="day-5" role="tabpanel" aria-labelledby="tab-5">
+      <div class="day-head"><h3>금요일</h3><p>채소 다섯 가지 비빔밥</p></div>
+      <div class="meals">
+        <article class="meal">
+          <h4 class="meal-title">아침 <span>목요일 저녁 데워서</span></h4>
+          <ul class="menu"><li>조림 무</li><li>청경채무침</li><li>달걀국</li><li>잡곡밥</li></ul>
+          <p class="addon"><b>곁들임</b> 임신부는 플레인 요구르트, 간 관리는 무가당 두유 + 블루베리</p>
+        </article>
+        <article class="meal">
+          <h4 class="meal-title">점심 <span>각자 회사</span></h4>
+          <p class="small">금요일 회식이 있다면 임신부는 익힌 메뉴만, 간 관리는 술 대신 탄산수로.</p>
+        </article>
+        <article class="meal dinner full">
+          <h4 class="meal-title">저녁 <span>18시 이후 · 30분</span></h4>
+          <ul class="menu"><li>소고기 채소 비빔밥</li><li>무 콩나물국</li></ul>
+          <div class="tags"><span class="tag">철분</span><span class="tag">엽산</span><span class="tag">십자화과</span></div>
+          <ol class="steps">
+            <li>물 5컵에 채 썬 무 한 줌과 콩나물 1봉을 넣고 뚜껑을 덮어 7분 끓입니다. 콩나물 절반은 건져 소금·참기름 조금으로 무치고, 나머지는 대파·마늘을 넣어 국으로 둡니다.</li>
+            <li>시금치를 데쳐 무치고, 채 썬 애호박·당근은 팬에 물 1큰술을 넣어 볶듯이 익힙니다.</li>
+            <li>소고기 다짐육 200g을 간장·마늘로 볶고, 달걀은 노른자까지 익혀 부칩니다.</li>
+            <li>잡곡밥에 올리고 고추장 조금, 또는 간장 양념으로 비빕니다.</li>
+          </ol>
+          <div class="adjust">
+            <div class="who mom"><b>임신부</b><p>달걀은 노른자까지 완전히 익힙니다. 매운 게 부담되면 간장 양념으로.</p></div>
+            <div class="who liver"><b>간 관리</b><p>밥 2/3공기에 나물은 두 배로 올립니다.</p></div>
+          </div>
+          <p class="keep"><b>내일 아침용</b>나물과 고기볶음 1인분씩 따로, 콩나물국</p>
+        </article>
+      </div>
+    </div>
+
+    <!-- 토 -->
+    <div class="day" id="day-6" role="tabpanel" aria-labelledby="tab-6">
+      <div class="day-head"><h3>토요일</h3><p>생선 3회차 · 점심도 집에서</p></div>
+      <div class="meals">
+        <article class="meal full">
+          <h4 class="meal-title">아침 <span>금요일 저녁 데워서</span></h4>
+          <ul class="menu"><li>비빔밥 재료 데워서 다시 비비기</li><li>콩나물국</li></ul>
+          <p class="addon"><b>곁들임</b> 키위 1개</p>
+        </article>
+        <article class="meal full">
+          <h4 class="meal-title">점심 <span>집 · 20분</span></h4>
+          <ul class="menu"><li>새우 브로콜리 마늘볶음</li><li>양배추 샐러드</li><li>잡곡밥</li></ul>
+          <div class="tags"><span class="tag">저수은 해산물</span><span class="tag">십자화과</span></div>
+          <ol class="steps">
+            <li>냉동 손질새우 300g을 해동하고, 밀프렙해 둔 찐 브로콜리를 꺼냅니다.</li>
+            <li>팬에 올리브유 1큰술, 편 썬 마늘을 볶다가 새우를 넣어 속까지 분홍색·불투명해질 때까지 익히고, 브로콜리를 넣어 소금·후추로 마무리합니다.</li>
+            <li>양배추·당근을 채 썰어 올리브유, 식초, 소금 조금으로 버무립니다.</li>
+          </ol>
+          <div class="adjust">
+            <div class="who mom"><b>임신부</b><p>새우 속이 반투명하면 더 익힙니다. 생채소는 흐르는 물에 충분히 씻습니다.</p></div>
+            <div class="who liver"><b>간 관리</b><p>올리브유 드레싱은 괜찮고, 시판 마요네즈 드레싱은 피합니다.</p></div>
+          </div>
+        </article>
+        <article class="meal dinner full">
+          <h4 class="meal-title">저녁 <span>25분</span></h4>
+          <ul class="menu"><li>두부 버섯 전골</li><li>잡곡밥</li></ul>
+          <div class="tags"><span class="tag">담백</span><span class="tag">콩 단백질</span><span class="tag">십자화과</span></div>
+          <ol class="steps">
+            <li>물 6컵에 다시마 한 조각(5×5cm)을 10분 우린 뒤 건져 냅니다.</li>
+            <li>배추, 청경채, 버섯 세 가지, 두부 1모, 대파를 담고 국간장·마늘로 간해 끓입니다.</li>
+            <li>마지막에 달걀 2개를 풀어 넣고 완전히 익힙니다.</li>
+          </ol>
+          <div class="adjust">
+            <div class="who mom"><b>임신부</b><p>다시마는 우린 뒤 꼭 건져 요오드가 과하지 않게 합니다.</p></div>
+            <div class="who liver"><b>간 관리</b><p>마지막 라면·칼국수 사리는 생략합니다.</p></div>
+          </div>
+          <p class="keep"><b>내일 아침용</b>전골 국물과 건더기</p>
+        </article>
+      </div>
+    </div>
+
+    <!-- 일 -->
+    <div class="day" id="day-0" role="tabpanel" aria-labelledby="tab-0">
+      <div class="day-head"><h3>일요일</h3><p>오후에 다음 주 밀프렙</p></div>
+      <div class="meals">
+        <article class="meal full">
+          <h4 class="meal-title">아침 <span>토요일 저녁 데워서</span></h4>
+          <ul class="menu"><li>전골 국물에 밥을 넣어 끓인 채소죽</li></ul>
+          <p class="addon"><b>곁들임</b> 귤 1개, 임신부는 요구르트</p>
+        </article>
+        <article class="meal full">
+          <h4 class="meal-title">점심 <span>집 · 30분</span></h4>
+          <ul class="menu"><li>잡곡 채소김밥</li></ul>
+          <div class="tags"><span class="tag">콜린</span><span class="tag">엽산</span></div>
+          <ol class="steps">
+            <li>잡곡밥에 소금·참기름을 조금 넣어 식힙니다.</li>
+            <li>속재료는 완숙 달걀지단, 데친 시금치, 볶은 당근, 오이, 간장에 조린 두부. 햄과 맛살은 넣지 않습니다.</li>
+            <li>김 4~5장으로 말아 썹니다.</li>
+          </ol>
+          <div class="adjust">
+            <div class="who mom"><b>임신부</b><p>그대로 먹는 햄·맛살 대신 익힌 재료만 씁니다. 오늘은 김이 해조류 1회입니다.</p></div>
+            <div class="who liver"><b>간 관리</b><p>김밥 1줄 반 정도로, 남으면 저녁에 넘기지 말고 바로 냉장.</p></div>
+          </div>
+        </article>
+        <article class="meal dinner full">
+          <h4 class="meal-title">저녁 <span>60분 · 밀프렙과 함께</span></h4>
+          <ul class="menu"><li>돼지 안심 수육</li><li>배추·양배추 쌈</li><li>무생채</li><li>배추된장국</li><li>잡곡밥</li></ul>
+          <div class="tags"><span class="tag">단백질</span><span class="tag">담백</span><span class="tag">십자화과</span></div>
+          <ol class="steps">
+            <li>돼지 안심(또는 기름 손질한 앞다리살) 500g을 된장 1큰술, 대파, 마늘, 생강, 통후추를 넣은 물에 40~50분 삶습니다. 이 시간에 밀프렙을 진행합니다.</li>
+            <li>무 1/4개를 채 썰어 고춧가루, 식초, 소금 조금으로 무칩니다.</li>
+            <li>알배추·양배추는 5분 쪄서 쌈으로, 된장국은 화요일과 같은 방법으로 끓입니다.</li>
+          </ol>
+          <div class="adjust">
+            <div class="who mom"><b>임신부</b><p>고기 가운데에 분홍빛이 없을 때까지 삶습니다. 새우젓은 염분이 많으니 쌈장이나 양념간장 조금으로.</p></div>
+            <div class="who liver"><b>간 관리</b><p>고기 1/3, 쌈채소 2/3 비율로 싸 드세요.</p></div>
+          </div>
+          <p class="keep"><b>내일 아침용</b>수육 1인분씩, 된장국, 무생채</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="lunch">
+    <div class="section-head">
+      <h2>회사 점심 고르는 법</h2>
+      <p>메뉴를 고를 수 없는 날이 많으니, 담는 순서와 양으로 조절합니다.</p>
+    </div>
+    <p class="rule"><b>공통</b> 식판의 절반은 채소 반찬, 1/4은 단백질, 1/4은 밥. 채소부터 먹고 국물은 절반 이상 남깁니다.</p>
+    <div class="cols">
+      <div class="panel mom">
+        <h3>임신부</h3>
+        <h4>고를 것</h4>
+        <ul>
+          <li>익힌 생선·고기, 두부, 완숙 달걀 반찬</li>
+          <li>나물과 데친 채소, 건더기 많은 국</li>
+        </ul>
+        <h4>피할 것</h4>
+        <ul>
+          <li>회덮밥, 초밥, 물회, 육회, 생굴</li>
+          <li>반숙 달걀, 수란</li>
+          <li>데우지 않은 햄·소시지가 든 샌드위치</li>
+          <li>샐러드 위 생 새싹(무순, 브로콜리 새싹)</li>
+          <li>참치회, 황새치 같은 고수은 생선</li>
+        </ul>
+        <h4>느끼한 메뉴인 날</h4>
+        <ul>
+          <li>돈가스·크림 메뉴면 밥, 국, 나물 위주로</li>
+          <li>입덧이 심한 날을 위해 크래커·바나나를 회사에 두기</li>
+        </ul>
+      </div>
+      <div class="panel liver">
+        <h3>간 관리</h3>
+        <h4>고를 것</h4>
+        <ul>
+          <li>밥 2/3공기, 채소 반찬 2가지 이상</li>
+          <li>구이·찜·조림 같은 기름 적은 단백질</li>
+        </ul>
+        <h4>줄일 것</h4>
+        <ul>
+          <li>튀김·전은 1~2조각까지</li>
+          <li>라면, 짜장, 떡볶이 같은 면·떡 메뉴는 주 1회 이하</li>
+          <li>단 음료, 디저트, 믹스커피 (블랙커피는 괜찮음)</li>
+        </ul>
+        <h4>회식</h4>
+        <ul>
+          <li>술 대신 탄산수나 무알코올 음료</li>
+          <li>안주는 구이, 찜, 채소 위주</li>
+          <li>점심 후 10~15분 걷기</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="prep">
+    <div class="section-head">
+      <h2>일요일 밀프렙</h2>
+      <p>일요일 오후 4시부터 약 90분. 수육을 삶는 동안 함께 하면 평일 저녁 조리 시간이 줄어듭니다. 첫 주는 시작 전날 해 두세요.</p>
+    </div>
+    <ol class="prep">
+      <li><span class="time">0분</span><div class="what"><b>잡곡밥 6~8인분 짓기</b><span>현미·보리·귀리. 시판 잡곡 혼합에 율무가 들었는지 확인하고, 율무 없는 것을 고릅니다.</span></div></li>
+      <li><span class="time">10분</span><div class="what"><b>십자화과 채소 찌기</b><span>브로콜리 2송이, 콜리플라워 1송이를 한입 크기로 썰어 3~4분 찝니다. 3일분은 냉장, 나머지는 냉동.</span></div></li>
+      <li><span class="time">25분</span><div class="what"><b>멸치호두볶음</b><span>마른 팬에 잔멸치를 볶아 비린내를 날리고, 호두와 간장 1작은술, 올리고당 1큰술, 기름 1작은술로 버무립니다.</span></div></li>
+      <li><span class="time">40분</span><div class="what"><b>메추리알 장조림(저염)</b><span>간장과 물을 1:4로. 아침 곁들임 반찬으로 일주일간 씁니다.</span></div></li>
+      <li><span class="time">55분</span><div class="what"><b>달걀 6개 완숙</b><span>끓는 물에 12분. 껍질째 냉장하고 일주일 안에 먹습니다.</span></div></li>
+      <li><span class="time">65분</span><div class="what"><b>밥 소분 냉동</b><span>1인분씩. 간 관리용은 작은 용기(2/3공기)에 담습니다.</span></div></li>
+      <li><span class="time">75분</span><div class="what"><b>채소 손질</b><span>양배추, 배추, 무, 대파를 씻어 썰어 밀폐용기에. 화~목 저녁이 빨라집니다.</span></div></li>
+      <li><span class="time">85분</span><div class="what"><b>스무디 팩 4개</b><span>찐 브로콜리 1/2컵 + 바나나 1/2 + 블루베리를 지퍼백에 담아 냉동. 아침 곁들임으로 씁니다.</span></div></li>
+    </ol>
+    <div class="smoothies">
+      <div class="panel">
+        <h3>그린 브로콜리 키위 스무디</h3>
+        <p class="small">스무디 팩 1개 + 데친 시금치 한 줌 + 키위 1개 + 물이나 무가당 두유. 엽산과 비타민C, 철분 흡수에 좋습니다.</p>
+      </div>
+      <div class="panel">
+        <h3>베리 요구르트 스무디</h3>
+        <p class="small">블루베리·딸기 + 데친 케일 조금 + 살균 플레인 요구르트 + 호두. 임신부의 칼슘 보충용입니다. 간 관리는 요구르트 대신 두유로.</p>
+      </div>
+    </div>
+    <p class="small muted" style="margin-top:10px">스무디는 채소를 익혀 넣고 과일은 1회분 이하로. 생 새싹과 생케일 대량은 쓰지 않습니다. 만들면 바로 마십니다.</p>
+  </section>
+
+  <section id="daily">
+    <div class="section-head">
+      <h2>매일 체크</h2>
+      <p>체크 표시는 이 기기에만 날짜별로 저장되고, 다음 날이면 새로 시작합니다.</p>
+    </div>
+    <div class="cols">
+      <div class="panel mom">
+        <h3>임신부</h3>
+        <ul class="check-list" data-group="daily-mom">
+          <li><label><input type="checkbox" id="dm-1" data-key="dm-1"><span>엽산제 먹기 (물과 함께, 차와 같이 먹지 않기)</span></label></li>
+          <li><label><input type="checkbox" id="dm-2" data-key="dm-2"><span>물 8잔</span></label></li>
+          <li><label><input type="checkbox" id="dm-3" data-key="dm-3"><span>과일 2번 (통과일로)</span></label></li>
+          <li><label><input type="checkbox" id="dm-4" data-key="dm-4"><span>칼슘 식품 1~2번 (요구르트, 치즈, 멸치, 두부)</span></label></li>
+          <li><label><input type="checkbox" id="dm-5" data-key="dm-5"><span>카페인 200mg 미만 (아메리카노 1잔이면 끝)</span></label></li>
+          <li><label><input type="checkbox" id="dm-6" data-key="dm-6"><span>철분제 (16주 이후 처방대로, 유제품·차와 2시간 띄우기)</span></label></li>
+        </ul>
+      </div>
+      <div class="panel liver">
+        <h3>간 관리</h3>
+        <ul class="check-list" data-group="daily-liver">
+          <li><label><input type="checkbox" id="dl-1" data-key="dl-1"><span>술 마시지 않기</span></label></li>
+          <li><label><input type="checkbox" id="dl-2" data-key="dl-2"><span>십자화과 채소 1번 이상</span></label></li>
+          <li><label><input type="checkbox" id="dl-3" data-key="dl-3"><span>밥은 매끼 2/3공기</span></label></li>
+          <li><label><input type="checkbox" id="dl-4" data-key="dl-4"><span>단 음료·과자·야식 0</span></label></li>
+          <li><label><input type="checkbox" id="dl-5" data-key="dl-5"><span>저녁 먹고 30분 걷기</span></label></li>
+          <li><label><input type="checkbox" id="dl-6" data-key="dl-6"><span>우유 대신 두유나 요구르트</span></label></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="shopping">
+    <div class="section-head">
+      <h2>장보기 목록</h2>
+      <p>두 사람, 일주일 기준입니다. 체크 표시는 이 기기에 저장됩니다.</p>
+    </div>
+    <div class="shop">
+      <div class="panel">
+        <h3>채소</h3>
+        <ul class="check-list" data-group="shop">
+          <li><label><input type="checkbox" id="s-v1" data-key="s-v1"><span>브로콜리 <span class="qty">3송이</span></span></label></li>
+          <li><label><input type="checkbox" id="s-v2" data-key="s-v2"><span>콜리플라워 <span class="qty">1송이</span></span></label></li>
+          <li><label><input type="checkbox" id="s-v3" data-key="s-v3"><span>양배추 <span class="qty">1/2통</span></span></label></li>
+          <li><label><input type="checkbox" id="s-v4" data-key="s-v4"><span>알배추 <span class="qty">1통</span></span></label></li>
+          <li><label><input type="checkbox" id="s-v5" data-key="s-v5"><span>무 <span class="qty">1개</span></span></label></li>
+          <li><label><input type="checkbox" id="s-v6" data-key="s-v6"><span>청경채 <span class="qty">300g</span></span></label></li>
+          <li><label><input type="checkbox" id="s-v7" data-key="s-v7"><span>시금치 <span class="qty">2단</span></span></label></li>
+          <li><label><input type="checkbox" id="s-v8" data-key="s-v8"><span>콩나물 <span class="qty">300g</span></span></label></li>
+          <li><label><input type="checkbox" id="s-v9" data-key="s-v9"><span>애호박·오이 <span class="qty">각 1개</span></span></label></li>
+          <li><label><input type="checkbox" id="s-v10" data-key="s-v10"><span>당근 <span class="qty">2개</span></span></label></li>
+          <li><label><input type="checkbox" id="s-v11" data-key="s-v11"><span>단호박 <span class="qty">작은 것 1개</span></span></label></li>
+          <li><label><input type="checkbox" id="s-v12" data-key="s-v12"><span>버섯 3종 <span class="qty">각 1팩</span></span></label></li>
+          <li><label><input type="checkbox" id="s-v13" data-key="s-v13"><span>대파, 마늘, 생강</span></label></li>
+          <li><label><input type="checkbox" id="s-v14" data-key="s-v14"><span>케일 <span class="qty">소량, 스무디용</span></span></label></li>
+        </ul>
+      </div>
+      <div class="panel">
+        <h3>과일</h3>
+        <ul class="check-list" data-group="shop">
+          <li><label><input type="checkbox" id="s-f1" data-key="s-f1"><span>귤 <span class="qty">1kg</span></span></label></li>
+          <li><label><input type="checkbox" id="s-f2" data-key="s-f2"><span>키위 <span class="qty">6개</span></span></label></li>
+          <li><label><input type="checkbox" id="s-f3" data-key="s-f3"><span>사과 <span class="qty">3개</span></span></label></li>
+          <li><label><input type="checkbox" id="s-f4" data-key="s-f4"><span>바나나 <span class="qty">1송이</span></span></label></li>
+          <li><label><input type="checkbox" id="s-f5" data-key="s-f5"><span>냉동 블루베리 <span class="qty">1봉</span></span></label></li>
+          <li><label><input type="checkbox" id="s-f6" data-key="s-f6"><span>레몬 <span class="qty">1개</span></span></label></li>
+        </ul>
+        <h3 style="margin-top:8px">유제품·대체</h3>
+        <ul class="check-list" data-group="shop">
+          <li><label><input type="checkbox" id="s-d1" data-key="s-d1"><span>살균 플레인 요구르트 <span class="qty">4~6개, 임신부용</span></span></label></li>
+          <li><label><input type="checkbox" id="s-d2" data-key="s-d2"><span>무가당 두유 <span class="qty">4팩, 간 관리용</span></span></label></li>
+        </ul>
+      </div>
+      <div class="panel">
+        <h3>단백질</h3>
+        <ul class="check-list" data-group="shop">
+          <li><label><input type="checkbox" id="s-p1" data-key="s-p1"><span>소고기 우둔·양지 <span class="qty">200g</span></span></label></li>
+          <li><label><input type="checkbox" id="s-p2" data-key="s-p2"><span>소고기 다짐육 <span class="qty">200g</span></span></label></li>
+          <li><label><input type="checkbox" id="s-p3" data-key="s-p3"><span>연어 필렛 <span class="qty">2쪽, 약 300g</span></span></label></li>
+          <li><label><input type="checkbox" id="s-p4" data-key="s-p4"><span>고등어 <span class="qty">1마리, 손질</span></span></label></li>
+          <li><label><input type="checkbox" id="s-p5" data-key="s-p5"><span>닭가슴살 <span class="qty">400g</span></span></label></li>
+          <li><label><input type="checkbox" id="s-p6" data-key="s-p6"><span>냉동 손질새우 <span class="qty">300g</span></span></label></li>
+          <li><label><input type="checkbox" id="s-p7" data-key="s-p7"><span>돼지 안심 <span class="qty">500g</span></span></label></li>
+          <li><label><input type="checkbox" id="s-p8" data-key="s-p8"><span>두부 <span class="qty">3모</span></span></label></li>
+          <li><label><input type="checkbox" id="s-p9" data-key="s-p9"><span>달걀 <span class="qty">30구</span></span></label></li>
+          <li><label><input type="checkbox" id="s-p10" data-key="s-p10"><span>메추리알 <span class="qty">1팩</span></span></label></li>
+        </ul>
+      </div>
+      <div class="panel">
+        <h3>곡물·건어물·양념</h3>
+        <ul class="check-list" data-group="shop">
+          <li><label><input type="checkbox" id="s-g1" data-key="s-g1"><span>현미, 보리, 귀리 <span class="qty">율무 없는 것</span></span></label></li>
+          <li><label><input type="checkbox" id="s-g2" data-key="s-g2"><span>건미역 <span class="qty">20g</span></span></label></li>
+          <li><label><input type="checkbox" id="s-g3" data-key="s-g3"><span>다시마 <span class="qty">1장</span></span></label></li>
+          <li><label><input type="checkbox" id="s-g4" data-key="s-g4"><span>김밥김 <span class="qty">5장</span></span></label></li>
+          <li><label><input type="checkbox" id="s-g5" data-key="s-g5"><span>잔멸치, 호두 <span class="qty">각 100g</span></span></label></li>
+          <li><label><input type="checkbox" id="s-g6" data-key="s-g6"><span>겨자가루</span></label></li>
+          <li><label><input type="checkbox" id="s-g7" data-key="s-g7"><span>된장, 국간장, 저염 간장, 쌈장</span></label></li>
+          <li><label><input type="checkbox" id="s-g8" data-key="s-g8"><span>올리브유, 들기름, 참기름, 식초</span></label></li>
+        </ul>
+      </div>
+    </div>
+    <div class="panel-foot" style="margin-top:12px">
+      <span class="small muted" id="shop-count" aria-live="polite"></span>
+      <button class="btn" type="button" id="shop-reset">장보기 체크 모두 지우기</button>
+    </div>
+  </section>
+
+  <section id="notes">
+    <div class="section-head">
+      <h2>같이 먹을 때 기억할 것</h2>
+    </div>
+    <div class="notes">
+      <div class="panel">
+        <h3>음식 조합</h3>
+        <ul>
+          <li>철분 많은 저녁(월·금) 직후의 녹차·홍차·커피는 1~2시간 뒤로 미룹니다. 폴리페놀이 철 흡수를 방해합니다.</li>
+          <li>임신부 철분제는 요구르트·우유·칼슘제와 2시간 띄웁니다.</li>
+          <li>엽산제는 물과 먹고, 녹차·홍차와 같은 시간에 먹지 않습니다.</li>
+          <li>미역, 다시마, 김은 같은 날 겹치지 않게 했습니다(월 미역국, 토 다시마는 건짐, 일 김밥).</li>
+          <li>시금치와 두부는 같이 먹어도 됩니다. 결석이 생긴다는 말은 속설이고, 같이 먹으면 오히려 결석 위험이 낮아집니다.</li>
+          <li>제철 감은 하루 1개까지, 빈속에는 피합니다.</li>
+        </ul>
+      </div>
+      <div class="panel">
+        <h3>남은 음식을 아침으로 먹을 때</h3>
+        <ul>
+          <li>조리 후 2시간 안에 냉장합니다.</li>
+          <li>3~4일 안에 먹고, 더 둘 음식은 냉동합니다.</li>
+          <li>아침에는 김이 날 때까지(74°C) 데웁니다. 리스테리아는 냉장고에서도 자라기 때문에 임신부는 특히 지킵니다.</li>
+          <li>생선 요리는 당일에 다 먹고, 아침은 국과 반찬으로 채웁니다.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>이 식단은 공개된 가이드라인과 연구를 바탕으로 한 정보이며 진료를 대신하지 않습니다. 감마GT 200의 원인 확인, 복용 중인 약(여드름 약 포함), 임신부 영양제 용량은 담당 의사와 확인하세요.</p>
+    <p>주요 근거</p>
+    <ul>
+      <li><a href="https://www.fda.gov/food/consumers/advice-about-eating-fish" target="_blank" rel="noopener">FDA/EPA, Advice about Eating Fish</a> · <a href="https://www.mfds.go.kr/brd/m_100/view.do?seq=24909" target="_blank" rel="noopener">식약처, 임신부 생선 섭취 참고자료</a></li>
+      <li><a href="https://www.nhs.uk/pregnancy/keeping-well/foods-to-avoid/" target="_blank" rel="noopener">NHS, Foods to avoid in pregnancy</a> · <a href="https://www.fda.gov/food/health-educators/listeria-food-safety-moms-be" target="_blank" rel="noopener">FDA, Listeria: Food Safety for Moms-to-Be</a></li>
+      <li><a href="https://www.cdc.gov/alcohol-pregnancy/about/index.html" target="_blank" rel="noopener">CDC, Alcohol Use During Pregnancy</a> · <a href="https://pubmed.ncbi.nlm.nih.gov/20664420/" target="_blank" rel="noopener">ACOG, Moderate Caffeine Consumption</a></li>
+      <li><a href="https://ods.od.nih.gov/factsheets/Iron-HealthProfessional/" target="_blank" rel="noopener">NIH ODS, Iron</a> · <a href="https://ods.od.nih.gov/factsheets/Iodine-HealthProfessional/" target="_blank" rel="noopener">NIH ODS, Iodine</a></li>
+      <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC11519095/" target="_blank" rel="noopener">EASL–EASD–EASO MASLD 가이드라인(2024)</a> · <a href="https://pubmed.ncbi.nlm.nih.gov/17616769/" target="_blank" rel="noopener">저혈당지수 식단과 여드름 RCT(2007)</a></li>
+      <li><a href="https://lpi.oregonstate.edu/mic/dietary-factors/phytochemicals/isothiocyanates" target="_blank" rel="noopener">Linus Pauling Institute, Isothiocyanates</a> · <a href="https://pubmed.ncbi.nlm.nih.gov/23411305/" target="_blank" rel="noopener">익힌 브로콜리와 겨자씨 연구(2013)</a></li>
+      <li><a href="https://www.fsis.usda.gov/food-safety/safe-food-handling-and-preparation/food-safety-basics/leftovers-and-food-safety" target="_blank" rel="noopener">USDA FSIS, Leftovers and Food Safety</a></li>
+    </ul>
+  </footer>
+</div>
+
+<script>
+(function () {
+  document.documentElement.classList.add("js");
+
+  // 요일 탭
+  var tablist = document.querySelector(".tabs");
+  var tabs = Array.prototype.slice.call(document.querySelectorAll(".tab"));
+  var panels = Array.prototype.slice.call(document.querySelectorAll(".day"));
+  var today = new Date().getDay();
+
+  function select(day, focus) {
+    tabs.forEach(function (t) {
+      var on = t.getAttribute("data-day") === String(day);
+      t.setAttribute("aria-selected", on ? "true" : "false");
+      t.tabIndex = on ? 0 : -1;
+      if (on && focus) t.focus();
+    });
+    panels.forEach(function (p) { p.hidden = p.id !== "day-" + day; });
+  }
+
+  tabs.forEach(function (t, i) {
+    if (t.getAttribute("data-day") === String(today)) {
+      var mark = document.createElement("span");
+      mark.className = "today";
+      mark.textContent = "오늘";
+      t.appendChild(mark);
+    }
+    t.addEventListener("click", function () { select(t.getAttribute("data-day"), false); });
+    t.addEventListener("keydown", function (e) {
+      var next = null;
+      if (e.key === "ArrowRight") next = tabs[(i + 1) % tabs.length];
+      if (e.key === "ArrowLeft") next = tabs[(i - 1 + tabs.length) % tabs.length];
+      if (next) { e.preventDefault(); select(next.getAttribute("data-day"), true); }
+    });
+  });
+  tablist.hidden = false;
+  select(today, false);
+
+  // 체크 저장 (이 기기에만)
+  function load(key) {
+    try { return JSON.parse(localStorage.getItem(key) || "{}"); } catch (e) { return {}; }
+  }
+  function save(key, value) {
+    try { localStorage.setItem(key, JSON.stringify(value)); } catch (e) {}
+  }
+  var d = new Date();
+  var dateKey = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
+  var DAILY = "meal-plan:daily:" + dateKey;
+  var SHOP = "meal-plan:shop";
+  var daily = load(DAILY);
+  var shop = load(SHOP);
+
+  var shopBoxes = Array.prototype.slice.call(document.querySelectorAll('[data-group="shop"] input'));
+  var countEl = document.getElementById("shop-count");
+  function updateCount() {
+    var done = shopBoxes.filter(function (b) { return b.checked; }).length;
+    countEl.textContent = done + " / " + shopBoxes.length + "개 담음";
+  }
+
+  document.querySelectorAll(".check-list").forEach(function (list) {
+    var isShop = list.getAttribute("data-group") === "shop";
+    var store = isShop ? shop : daily;
+    list.querySelectorAll("input").forEach(function (box) {
+      var k = box.getAttribute("data-key");
+      box.checked = !!store[k];
+      box.addEventListener("change", function () {
+        store[k] = box.checked;
+        save(isShop ? SHOP : DAILY, store);
+        if (isShop) updateCount();
+      });
+    });
+  });
+  updateCount();
+
+  document.getElementById("shop-reset").addEventListener("click", function () {
+    shopBoxes.forEach(function (b) {
+      b.checked = false;
+      b.dispatchEvent(new Event("change"));
+    });
+  });
+})();
+</script>
