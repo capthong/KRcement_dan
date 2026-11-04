@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>데스크 셋업 플래너</title>
+    <meta name="claude:viewport-fit-sides" content="cover" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap" />
+    <link rel="stylesheet" href="./src/planner/planner.css" />
+  </head>
+  <body>
+    <div class="app">
+      <section class="stage">
+        <div id="viewport" class="viewport" aria-label="3D 방 미리보기"></div>
+        <div class="toolbar top-left" role="toolbar" aria-label="시점">
+          <div class="seg" id="views">
+            <button type="button" data-view="orbit" aria-pressed="true">3D</button>
+            <button type="button" data-view="seated">앉은 시점</button>
+            <button type="button" data-view="top">평면</button>
+            <button type="button" data-view="under">책상 아래</button>
+          </div>
+        </div>
+        <div class="toolbar top-right" role="toolbar" aria-label="표시">
+          <div class="seg" id="cables">
+            <button type="button" data-cables="off" aria-pressed="true">선 숨김</button>
+            <button type="button" data-cables="messy">정리 전</button>
+            <button type="button" data-cables="tidy">정리 후</button>
+          </div>
+          <button type="button" class="pill" id="toggle-gaps" aria-pressed="true">벽 거리</button>
+        </div>
+        <p class="stage-hint" id="stage-hint">빈 곳을 끌면 화면 회전 · 물건을 끌면 이동 · 휠/핀치로 확대</p>
+      </section>
+
+      <aside class="panel">
+        <header class="panel-head">
+          <div>
+            <h1>데스크 셋업 플래너</h1>
+            <p class="sub" id="room-sub"></p>
+          </div>
+        </header>
+        <nav class="tabs" id="tabs" role="tablist">
+          <button type="button" role="tab" data-tab="room">방</button>
+          <button type="button" role="tab" data-tab="add">추가</button>
+          <button type="button" role="tab" data-tab="sel">선택</button>
+          <button type="button" role="tab" data-tab="check">점검 <span class="count" id="issue-count" hidden></span></button>
+        </nav>
+        <div class="tab-body" id="tab-body"></div>
+      </aside>
+    </div>
+    <script type="module" src="./src/planner/main.ts"></script>
+  </body>
+</html>

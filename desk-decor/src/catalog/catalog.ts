@@ -10,7 +10,11 @@ export type Category =
   | 'pc'
   | 'keyboard'
   | 'deskmat'
-  | 'laptop';
+  | 'laptop'
+  | 'mouse'
+  | 'chair'
+  | 'plant'
+  | 'shelf';
 
 export interface Product {
   id: string;
@@ -41,6 +45,10 @@ export const CATEGORY_LABEL: Record<Category, string> = {
   keyboard: '키보드',
   deskmat: '데스크 매트',
   laptop: '노트북',
+  mouse: '마우스',
+  chair: '의자',
+  plant: '화분',
+  shelf: '책장',
 };
 
 /** 대각선(인치)·화면비 → 패널 크기[mm]. 베젤은 좌우 8mm, 하단 15mm 정도로 가정. */
