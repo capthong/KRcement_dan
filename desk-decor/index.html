@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="description" content="사진 한 장과 A4 용지로 길이를 재고, 책상·모니터를 3D로 놓아 보고, 선정리 용품까지 추천받는 데스크테리어 프로토타입" />
+    <title>데스크 셋업 미리보기</title>
+    <link rel="stylesheet" href="./src/styles.css" />
+  </head>
+  <body>
+    <header class="top">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">▦</span>
+        <div>
+          <h1>데스크 셋업 미리보기</h1>
+          <p class="sub">사진 한 장 + A4 용지로 재고, 놓아 보고, 선정리까지 · 프로토타입 v0.1</p>
+        </div>
+      </div>
+      <span class="privacy" title="사진은 브라우저 안에서만 처리되고 서버로 전송되지 않습니다">🔒 사진은 기기 밖으로 나가지 않음</span>
+    </header>
+
+    <main class="layout">
+      <section class="stage-col">
+        <div id="stage" class="stage" data-mode="none">
+          <div id="zoomer" class="zoomer">
+            <img id="photo" alt="" hidden />
+            <canvas id="gl"></canvas>
+            <svg id="overlay" xmlns="http://www.w3.org/2000/svg"></svg>
+          </div>
+          <canvas id="loupe" width="150" height="150" hidden></canvas>
+          <button id="zoom" class="zoom-btn" type="button" hidden>🔍 확대</button>
+          <div id="empty" class="empty">
+            <p><strong>방이나 책상 자리를 찍은 사진</strong>을 고르거나,<br />샘플 사진으로 먼저 체험해 보세요.</p>
+          </div>
+        </div>
+        <p id="hint" class="hint" role="status" aria-live="polite"></p>
+      </section>
+
+      <aside class="panel">
+        <nav class="steps" id="steps" aria-label="단계"></nav>
+        <div id="step-body" class="step-body"></div>
+      </aside>
+    </main>
+
+    <input id="file" type="file" accept="image/*" capture="environment" hidden />
+    <script type="module" src="./src/main.ts"></script>
+  </body>
+</html>

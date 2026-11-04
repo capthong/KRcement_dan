@@ -1,0 +1,24 @@
+{
+  "name": "desk-decor",
+  "private": true,
+  "version": "0.1.0",
+  "description": "사진 한 장 + 기준 물체(A4 등)로 길이를 재고, 책상·모니터를 3D 박스로 배치해 보고, 선정리 용품을 추천하는 웹 프로토타입",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "build:artifact": "vite build -c vite.artifact.config.ts && node scripts/build-artifact.mjs"
+  },
+  "dependencies": {
+    "three": "^0.187.0"
+  },
+  "devDependencies": {
+    "@types/three": "^0.187.0",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.5",
+    "vitest": "^5.1.0"
+  }
+}
